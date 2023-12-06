@@ -1,60 +1,58 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node 
+typedef struct node 
 {
     int data;
-    struct Node *left, *right;
-};
+    struct node *left;
+    struct node *right;
+} Node;
 
-struct Node *newNode(int data) 
+Node* newNode(int data) 
 {
-    struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+    Node* node = (Node*)malloc(sizeof(Node));
     node->data = data;
-    node->left = node->right = NULL;
+    node->left = NULL;
+    node->right = NULL;
     return node;
 }
 
-void printInorder(struct Node *root) 
-{
-    if (root == NULL)
-    {
-        return;
-    }
-    printInorder(root->left);
-    printf("%d ", root->data);
-    printInorder(root->right);
-}
-
-struct Node *insert(struct Node *node, int data) 
+Node* insert(Node* node, int data) 
 {
     if (node == NULL)
-    {
         return newNode(data);
-    }
+
     if (data < node->data)
-    {
         node->left = insert(node->left, data);
-    }
     else if (data > node->data)
-    {
         node->right = insert(node->right, data);
-    }
+
     return node;
+}
+
+void inorderTraversal(Node* node) 
+{
+    if (node != NULL) 
+    {
+        inorderTraversal(node->left);
+        printf("%d ", node->data);
+        inorderTraversal(node->right);
+    }
 }
 
 int main() 
 {
-    struct Node *root = NULL;
-    root = insert(root, 1245);
-    insert(root, 634);
-    insert(root, 140);
-    insert(root, 300);
+    Node* root = NULL;
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 20);
+    insert(root, 40);
+    insert(root, 70);
+    insert(root, 60);
+    insert(root, 80);
 
-    printf("\n--------------------------------------------------------------");
-    printf("\n IN ORDER TRAVERSAL = ");
-    printInorder(root);
-    printf("\n--------------------------------------------------------------");
+    printf("Inorder traversal of the BST is: \n");
+    inorderTraversal(root);
 
     return 0;
 }
